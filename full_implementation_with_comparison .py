@@ -3,7 +3,7 @@ from scipy.linalg import hadamard
 import matplotlib.pyplot as plt
 
 # ==================================================
-# ALGORITHM 1 : OneDimOneBitCQ
+# ALGORITHM 1 : OneDimOneBitCQ | 
 # ==================================================
 def one_dim_one_bit_cq(x, l, r):
     
