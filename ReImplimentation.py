@@ -1,36 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Reproduction of Figure 2(a) from:
-"Correlated quantization for distributed mean estimation and optimization"
-(Suresh et al., 2022)
-
-Key details from Section 8 (Experiments), page 13:
-- n = 100 clients, d = 1024 dimensions, k = 2 (1-bit quantization)
-- Each coordinate j sampled as: mu(j) + U, where
-    mu(j) ~ Uniform[0,1] (fixed across clients)
-    U ~ Uniform[-4*sigma_md, 4*sigma_md] (independent per client per coord)
-- Vary sigma_md in {0.01, 0.02, 0.04, 0.08, 0.16}
-- Averaged over 10 runs for statistical consistency
-
-Algorithm 1 (OneDimOneBitCQ):
-  - Input: x1..xn, l, r  (the range covering all data)
-  - y_i = (x_i - l) / (r - l)
-  - U_i = pi_i/n + gamma_i (correlated via shared permutation)
-  - Q_i = l + (r-l) * 1{U_i < y_i}
-
-The quantizer range [l, r] per coordinate is set to [min, max] of that
-coordinate's data. As sigma_md grows, this range widens, increasing
-independent quantization error (which scales as (r-l)^2). Correlated
-quantization error scales as sigma_md*(r-l), growing more slowly.
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def generate_data(n, d, sigma_md, rng):
     """
-    Generate data per Section 8: mu(j) + U_ij.
+    Generate data : mu(j) + U_ij.
     NO clipping — the quantizer adapts its range to the data.
     """
     mu = rng.uniform(0, 1, size=d)
@@ -41,8 +15,7 @@ def generate_data(n, d, sigma_md, rng):
 
 def independent_quantization(data, rng, l, r):
     """
-    Standard independent stochastic quantization (Eq. 3).
-    Per-coordinate range [l_j, r_j].
+    Standard independent stochastic quantization
     """
     n, d = data.shape
     ranges = r - l  # shape (d,)
@@ -59,7 +32,6 @@ def correlated_quantization(data, rng, l, r):
     """
     OneDimOneBitCQ (Algorithm 1).
     Shared permutation per dimension correlates the uniforms.
-    Per-coordinate range [l_j, r_j].
     """
     n, d = data.shape
     ranges = r - l
@@ -141,7 +113,7 @@ def main():
         print(f"  Independent RMSE = {rmse_ind:.4f}")
         print(f"  Correlated  RMSE = {rmse_cor:.4f}")
 
-    # ----- Plot Figure 2(a) -----
+    # Plot Figure 2(a)
     fig, ax = plt.subplots(figsize=(5.5, 4))
 
     x_pos = np.arange(len(sigma_md_values))
