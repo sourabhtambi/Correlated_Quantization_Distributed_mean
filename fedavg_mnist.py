@@ -41,10 +41,6 @@ def correlated_quantization(data, rng, l, r):
         Q[:, j] = (U < ys[:, j]).astype(float)
     return l[None, :] + ranges[None, :] * Q
 
-
-
-
-
 def walsh_hadamard_quantize_grads(grads, rng, R, quantize_fn):
     """
     Algorithm 3 applied to gradient vectors.
@@ -151,11 +147,7 @@ BASIC INFO:
     elif quantizer_name == "correlated":
         Q = correlated_quantization(client_grad_flats, rng, l, r)
         return np.mean(Q, axis=0)
-
-    #elif quantizer_name == "terngrad":
-        Q = terngrad_quantization(client_grad_flats, rng, l, r)
-        return np.mean(Q, axis=0)
-
+      
     elif quantizer_name == "independent+rotation":
         Q = walsh_hadamard_quantize_grads(
             client_grad_flats, rng, R, independent_quantization
@@ -302,7 +294,6 @@ def main():
         "No quantization":          "none",
         "Independent":              "independent",
         "Independent+Rotation":     "independent+rotation",
-        "TernGrad (log2(3) bits)":  "terngrad",
         "Correlated":               "correlated",
         "Correlated+Rotation":      "correlated+rotation",
     }
