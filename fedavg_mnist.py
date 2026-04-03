@@ -11,7 +11,6 @@ from scipy.linalg import hadamard
 import warnings
 warnings.filterwarnings('ignore')
 
-
 # ================================================================
 # Quantizers (same as previous wrok)
 # ================================================================
