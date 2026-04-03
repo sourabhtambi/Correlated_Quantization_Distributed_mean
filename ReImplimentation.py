@@ -1,56 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def generate_data(n, d, sigma_md, rng):
-    """
-    Generate data : mu(j) + U_ij.
-    NO clipping — the quantizer adapts its range to the data.
-    """
-    mu = rng.uniform(0, 1, size=d)
-    noise = rng.uniform(-4 * sigma_md, 4 * sigma_md, size=(n, d))
-    data = mu[None, :] + noise
-    return data
-
-
-def independent_quantization(data, rng, l, r):
-    """
-    Standard independent stochastic quantization
-    """
-    n, d = data.shape
-    ranges = r - l  # shape (d,)
-    ys = (data - l[None, :]) / ranges[None, :]
-    ys = np.clip(ys, 0, 1)
-
-    U = rng.uniform(size=(n, d))
-    Q = (U < ys).astype(float)
-
-    return l[None, :] + ranges[None, :] * Q
-
-
-def correlated_quantization(data, rng, l, r):
-    """
-    OneDimOneBitCQ (Algorithm 1).
-    Shared permutation per dimension correlates the uniforms.
-    """
-    n, d = data.shape
-    ranges = r - l
-    ys = (data - l[None, :]) / ranges[None, :]
-    ys = np.clip(ys, 0, 1)
-
-    Q = np.zeros_like(data)
-    for j in range(d):
-        pi = rng.permutation(n)
-        gamma = rng.uniform(0, 1.0 / n, size=n)
-        U = pi / n + gamma
-        Q[:, j] = (U < ys[:, j]).astype(float)
-
-    return l[None, :] + ranges[None, :] * Q
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-
 def generate_data(n, d, sigma_md, rng):
     mu = rng.uniform(0, 1, size=d)
     noise = rng.uniform(-4 * sigma_md, 4 * sigma_md, size=(n, d))
