@@ -277,7 +277,7 @@ def main():
     Reproduce Table 2, FedAvg column.
 
     Paper: Federated MNIST (341K, 3383 clients), logistic regression,
-           1000 rounds, 5 trials, k=2 (except TernGrad k=3).
+           1000 rounds, 5 trials, k=2.
 
     We use sklearn MNIST (60K train, 10K test) with 100 clients.
     """
