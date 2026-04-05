@@ -6,7 +6,10 @@ Experiment: Federated Averaging on MNIST
   - 5 repeated trials
   - Per-scheme total timing
 """
-
+"""
+This code is using slightly changed method to Quantize as for a genral loop it takes about ~2hrs , 
+and now it takes around ~24mins , as instead of using for loops , we use numpy arrays.
+"""
 import numpy as np
 from scipy.linalg import hadamard
 import warnings
